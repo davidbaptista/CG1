@@ -3,49 +3,65 @@ let camera, renderer, scene;
 let geometry, material, mesh;
 
 
-function addCylinder(obj, x, y, z, rx, ry, rz) {
+function createCylinder(obj, h) {
     'use strict'
 
-    geometry = new THREE.CylinderGeometry(5, 5, 20, 64);
+	geometry = new THREE.CylinderGeometry(0.1, 0.1, h, 64);
     material = new THREE.MeshBasicMaterial({color: 0xffff00, wireframe: true});
     mesh = new THREE.Mesh(geometry, material);
-    mesh.rotation.x = rx;
-    mesh.rotation.y = ry;
-    mesh.rotation.z = rz;
-    mesh.position.set(x, y, z);
+	
+	mesh.position.set(0, 0, 0);
+	obj.add(mesh);
 
-    obj.add(mesh);
+	return mesh;
 }
 
+function translateMesh(obj, x, y, z) {
+	obj.translateX(x);
+	obj.translateY(y);
+	obj.translateZ(z);
+}
 
-function createPole() {
+function rotateMesh(obj, x, y, z) {
+	obj.rotateX(x);
+	obj.rotateY(y);
+	obj.rotateZ(z);
+}
+
+function createSkeletonLower() {
     'use strict'
 
-    let pole = new THREE.Object3D();
+    let skeleton = new THREE.Object3D();
 
+	let c1 = createCylinder(skeleton, 4);
+	translateMesh(c1, 0, -2, 0);
 
-    addCylinder(pole, 0, 0, 0, 0, 0, 0);
-    addCylinder(pole, 0, 20, -2, Math.PI / 20 * -1, 0, 0);
+	let c2 = createCylinder(skeleton, 12);
+	translateMesh(c2, 0, -4, 0);
+	rotateMesh(c2, 0, 0, Math.PI / 2.5);
+	translateMesh(c2, 0, -4, 0);
 
-    pole.position.set(0, 0, 0);
+	
 
-    scene.add(pole);    
+    skeleton.position.set(0, 0, 0);
+
+    scene.add(skeleton);    
 }
 
 function createScene() {
     'use strict'
     scene = new THREE.Scene();
 
-    scene.add(new THREE.AxisHelper(10));
-    createPole();
+    scene.add(new THREE.AxisHelper(150));
+    createSkeletonLower();
 }
 
 function createCamera() {
     'use strict'
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
-    camera.position.x = 35;
-    camera.position.y = 35;
-    camera.position.z = 35;
+    camera = new THREE.OrthographicCamera(window.innerWidth / - 36, window.innerWidth / 36, window.innerHeight / 36, window.innerHeight / - 36, 1, 1000);
+    camera.position.x = 0;
+    camera.position.y = 0;
+    camera.position.z = 10;
     camera.lookAt(scene.position);
 }
 
