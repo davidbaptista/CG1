@@ -32,7 +32,7 @@ function createSkeletonLower() {
     'use strict'
 
     let skeleton = new THREE.Object3D();
-
+!
 	let c1 = createCylinder(skeleton, 4);
 	translateMesh(c1, 0, -2, 0);
 
