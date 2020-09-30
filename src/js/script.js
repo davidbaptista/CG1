@@ -16,6 +16,32 @@ function createCylinder(obj, h) {
 	return mesh;
 }
 
+function createOctahedron(obj, r) {
+	'use strict'
+
+	geometry = new THREE.OctahedronGeometry(r);
+	material = new THREE.MeshBasicMaterial({color: 0x0000ff, wireframe: true});
+	mesh = new THREE.Mesh(geometry, material);
+
+	mesh.position.set(0, 0, 0);
+	obj.add(mesh);
+
+	return mesh;
+}
+
+function createSphere(obj, r) {
+	'use strict'
+
+	geometry = new THREE.SphereGeometry(r, 64, 64)
+	material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true});
+	mesh = new THREE.Mesh(geometry, material);
+
+	mesh.position.set(0, 0, 0);
+	obj.add(mesh);
+
+	return mesh;
+}
+
 function translateMesh(obj, x, y, z) {
 	obj.translateX(x);
 	obj.translateY(y);
@@ -41,11 +67,53 @@ function createSkeletonLower() {
 	rotateMesh(c2, 0, 0, Math.PI / 2.5);
 	translateMesh(c2, 0, -4, 0);
 
-	
+	let o1 = createOctahedron(skeleton, 1);
+	translateMesh(o1, 0, -4, 0);
+	rotateMesh(o1, 0, 0, Math.PI / 2.5);
+	translateMesh(o1, 0, -11, 0);
 
-    skeleton.position.set(0, 0, 0);
+	let s1 = createSphere(skeleton, 1);
+	translateMesh(s1, 0, -4, 0);
+	rotateMesh(s1, 0, 0, Math.PI / 2.5);
+	translateMesh(s1, 0, 3, 0);
 
-    scene.add(skeleton);    
+	skeleton.position.set(0, 0, 0);
+		
+	return skeleton;
+}
+
+function createSkeletonMiddle() {
+	'use strict'
+
+	let skeleton = new THREE.Object3D();
+
+	let lowerSkeleton = createSkeletonLower();
+
+	let c1 = createCylinder(skeleton, 2);
+	translateMesh(c1, 0, -1, 0);
+
+	let c2 = createCylinder(skeleton, 16);
+	translateMesh(c2, 0, -2, 0);
+	rotateMesh(c2, 0, 0, Math.PI / -2.5);
+	translateMesh(c2, 0, -6, 0);
+
+	let o1 = createOctahedron(skeleton, 1);
+	translateMesh(o1, 0, -2, 0);
+	rotateMesh(o1, 0, 0, Math.PI / -2.5);
+	translateMesh(o1, 0, -15, 0);
+
+	let s1 = createSphere(skeleton, 1);
+	translateMesh(s1, 0, -2, 0);
+	rotateMesh(s1, 0, 0, Math.PI / -2.5);
+	translateMesh(s1, 0, 3, 0);
+
+	skeleton.add(lowerSkeleton);
+	translateMesh(lowerSkeleton, 0, -2, 0);
+	lowerSkeleton.translateOnAxis(new THREE.Vector3(Math.sin(Math.Pi/2.5), Math.cos(Math.Pi/2.5), 0).normalize(), -7);
+
+	scene.add(skeleton);
+
+	return skeleton;
 }
 
 function createScene() {
@@ -53,7 +121,7 @@ function createScene() {
     scene = new THREE.Scene();
 
     scene.add(new THREE.AxisHelper(150));
-    createSkeletonLower();
+    createSkeletonMiddle();
 }
 
 function createCamera() {
