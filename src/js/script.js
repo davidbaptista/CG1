@@ -222,10 +222,8 @@ function createScene() {
 function createCamera() {
     'use strict'
     camera = new THREE.OrthographicCamera(window.innerWidth / - 60, window.innerWidth / 60, window.innerHeight / 60, window.innerHeight / - 60, 1, 1000);
-    camera.position.x = 0;
-    camera.position.y = -11;
-    camera.position.z = 10;
-    camera.lookAt(0, -10, 0);
+    camera.position.set(0, -11.5, 10);
+    camera.lookAt(new THREE.Vector3(0,-11.5,0));
 }
 
 function onKeyDown(e) {
@@ -249,21 +247,22 @@ function onKeyDown(e) {
 		break;
 	case 49: //1
 		camera.position.x = 0;
-		camera.position.y = -11;
+		camera.position.y = -11.5;
 		camera.position.z = 10;
+		camera.lookAt(new THREE.Vector3(0,-11.5,0));
 		break;
 	case 50: //2
 		camera.position.x = 10;
-		camera.position.y = -11;
+		camera.position.y = -11.5;
 		camera.position.z = 0;
+		camera.lookAt(new THREE.Vector3(0,-11.5,0));
 		break;
 	case 51: //3
 		camera.position.x = 0;
 		camera.position.y = 10;
 		camera.position.z = 0;
+		camera.lookAt(new THREE.Vector3(0,-11.5,0));
 		break;
-
-
     }
 }
 
