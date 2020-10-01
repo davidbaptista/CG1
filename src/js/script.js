@@ -2,6 +2,10 @@ let camera, renderer, scene;
 
 let geometry, material, mesh;
 
+let skeletonUpper, skeletonMiddle, skeletonLower;
+
+let rotateUpper = 0, rotateMiddle = 0; rotateLower = 0; // 0 is stationary, -1 is counter clockwise 1 is clockwise
+
 
 function createCylinder(obj, h) {
     'use strict'
@@ -114,7 +118,7 @@ function createSkeletonMiddle() {
 
 	let skeleton = new THREE.Object3D();
 
-	let lowerSkeleton = createSkeletonLower();
+	skeletonLower = createSkeletonLower();
 
 	let c1 = createCylinder(skeleton, 2);
 	translateMesh(c1, 0, -1, 0);
@@ -134,11 +138,11 @@ function createSkeletonMiddle() {
 	rotateMesh(s1, 0, 0, Math.PI / -2.5);
 	translateMesh(s1, 0, 2.75, 0);
 
-	skeleton.add(lowerSkeleton);
-	translateMesh(lowerSkeleton, 0, -2, 0);
-	rotateMesh(lowerSkeleton, 0, 0, Math.PI / -2.5);
-	translateMesh(lowerSkeleton, 0, -8, 0);
-	rotateMesh(lowerSkeleton, 0, 0, Math.PI / 2.5);
+	skeleton.add(skeletonLower);
+	translateMesh(skeletonLower, 0, -2, 0);
+	rotateMesh(skeletonLower, 0, 0, Math.PI / -2.5);
+	translateMesh(skeletonLower, 0, -8, 0);
+	rotateMesh(skeletonLower, 0, 0, Math.PI / 2.5);
 
 	skeleton.position.set(0, 0, 0);
 
@@ -150,7 +154,7 @@ function createSkeletonUpper() {
 
 	let skeleton = new THREE.Object3D();
 
-	let middleSkeleton = createSkeletonMiddle();
+	skeletonMiddle = createSkeletonMiddle();
 
 	let c1 = createCylinder(skeleton, 10);
 	translateMesh(c1, 0, -5, 0);
@@ -203,12 +207,13 @@ function createSkeletonUpper() {
 	rotateMesh(b2, 0, 0, Math.PI / -2.5);
 	translateMesh(b2, 0, 4.75, 0);
 
-	skeleton.add(middleSkeleton);
-	translateMesh(middleSkeleton, 5, -10, 0);
+	skeleton.add(skeletonMiddle);
+	translateMesh(skeletonMiddle, 5, -10, 0);
 
 
 	scene.add(skeleton);
 
+	return skeleton;	
 }
 
 function createScene() {
@@ -216,7 +221,7 @@ function createScene() {
     scene = new THREE.Scene();
 
     scene.add(new THREE.AxisHelper(150));
-    createSkeletonUpper();
+    skeletonUpper = createSkeletonUpper();
 }
 
 function createCamera() {
@@ -226,17 +231,59 @@ function createCamera() {
     camera.lookAt(new THREE.Vector3(0,-11.5,0));
 }
 
+function onKeyUp(e) {
+	'use strict'
+
+	switch(e.keyCode) {
+			case 81: //Q
+			case 113: //q
+			case 87: //W
+			case 119: //w
+				rotateUpper = 0;
+				break;
+			case 65: //A
+			case 97: //a
+			case 68: //D
+			case 100: //d
+				rotateMiddle = 0;
+				break;
+			case 90: //Z
+			case 122: //z
+			case 67: //C
+			case 99: //c
+				rotateLower = 0
+				break;
+	}
+}
+
+
 function onKeyDown(e) {
     'use strict';
     switch (e.keyCode) {
+	case 81: //Q
+	case 113: //q
+		rotateUpper = -1;
+		break;
+	case 87: //W
+	case 119: //w
+		rotateUpper = 1
+		break;
     case 65: //A
     case 97: //a
-        scene.traverse(function (node) {
-            if (node instanceof THREE.Mesh) {
-                node.material.wireframe = !node.material.wireframe;
-            }
-        });
-        break;
+		rotateMiddle = -1;
+		break;
+	case 68: //D
+	case 100: //d
+		rotateMiddle = 1;
+		break;
+	case 90: //Z
+	case 122: //z
+		rotateLower = -1;
+		break;
+	case 67: //C
+	case 99: //c
+		rotateLower = 1;
+		break;
     case 69:  //E
     case 101: //e
         scene.traverse(function (node) {
@@ -285,13 +332,43 @@ function init() {
 
     render();
 
-    window.addEventListener("keydown", onKeyDown);
+	window.addEventListener("keydown", onKeyDown);
+	window.addEventListener("keyup", onKeyUp);
 }
 
 function animate() {
     'use strict';
+	
+	let clock = new THREE.Clock();
+	let speed = Math.PI;
+	let delta = 0;
 
-    render();
+	delta = clock.getDelta();
+	delta *= 10000;
+
+	if(rotateUpper == -1) {
+		console.log(delta);
+		rotateMesh(skeletonUpper, 0, speed * -delta, 0);
+	}
+	else if(rotateUpper == 1) {
+		rotateMesh(skeletonUpper, 0, speed * delta , 0);
+	}
+
+	if(rotateMiddle == -1) {
+		rotateMesh(skeletonMiddle, 0, speed * -delta, 0);
+	}
+	else if(rotateMiddle == 1) {
+		rotateMesh(skeletonMiddle, 0, speed * delta, 0);
+	}
+
+	if(rotateLower == -1) {
+		rotateMesh(skeletonLower, 0, speed * -delta, 0);
+	}
+	else if(rotateLower == 1) {
+		rotateMesh(skeletonLower, 0, speed * delta, 0);
+	}
+
+	render();
 
     requestAnimationFrame(animate);
 }
