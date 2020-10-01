@@ -6,6 +6,7 @@ let skeletonUpper, skeletonMiddle, skeletonLower;
 
 let rotateUpper = 0, rotateMiddle = 0; rotateLower = 0; // 0 is stationary, -1 is counter clockwise 1 is clockwise
 
+let clock = new THREE.Clock();
 
 function createCylinder(obj, h) {
     'use strict'
@@ -338,13 +339,10 @@ function init() {
 
 function animate() {
     'use strict';
-	
-	let clock = new THREE.Clock();
 	let speed = Math.PI;
 	let delta = 0;
 
 	delta = clock.getDelta();
-	//delta *= 10000;
 
 	if(rotateUpper == -1) {
 		console.log(delta);
