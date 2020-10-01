@@ -221,9 +221,9 @@ function createScene() {
 
 function createCamera() {
     'use strict'
-    camera = new THREE.OrthographicCamera(window.innerWidth / - 36, window.innerWidth / 36, window.innerHeight / 36, window.innerHeight / - 36, 1, 1000);
+    camera = new THREE.OrthographicCamera(window.innerWidth / - 60, window.innerWidth / 60, window.innerHeight / 60, window.innerHeight / - 60, 1, 1000);
     camera.position.x = 0;
-    camera.position.y = -10;
+    camera.position.y = -11;
     camera.position.z = 10;
     camera.lookAt(0, -10, 0);
 }
@@ -246,13 +246,30 @@ function onKeyDown(e) {
                 node.visible = !node.visible;
             }
         });
-        break;
+		break;
+	case 49: //1
+		camera.position.x = 0;
+		camera.position.y = -11;
+		camera.position.z = 10;
+		break;
+	case 50: //2
+		camera.position.x = 10;
+		camera.position.y = -11;
+		camera.position.z = 0;
+		break;
+	case 51: //3
+		camera.position.x = 0;
+		camera.position.y = 10;
+		camera.position.z = 0;
+		break;
+
+
     }
 }
 
 function render() {
     'use strict'
-    renderer.render(scene, camera);
+	renderer.render(scene, camera);
 }
 
 function init() {
