@@ -344,7 +344,7 @@ function animate() {
 	let delta = 0;
 
 	delta = clock.getDelta();
-	delta *= 10000;
+	//delta *= 10000;
 
 	if(rotateUpper == -1) {
 		console.log(delta);
