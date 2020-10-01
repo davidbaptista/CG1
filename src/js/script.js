@@ -109,7 +109,11 @@ function createSkeletonMiddle() {
 
 	skeleton.add(lowerSkeleton);
 	translateMesh(lowerSkeleton, 0, -2, 0);
-	lowerSkeleton.translateOnAxis(new THREE.Vector3(Math.sin(Math.Pi/2.5), Math.cos(Math.Pi/2.5), 0).normalize(), -7);
+	rotateMesh(lowerSkeleton, 0, 0, Math.PI / -2.5);
+	translateMesh(lowerSkeleton, 0, -8, 0);
+	rotateMesh(lowerSkeleton, 0, 0, Math.PI / 2.5);
+
+
 
 	scene.add(skeleton);
 
