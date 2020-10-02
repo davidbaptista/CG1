@@ -37,7 +37,7 @@ function createOctahedron(obj, r) {
 function createSphere(obj, r) {
 	'use strict'
 
-	geometry = new THREE.SphereGeometry(r, 64, 64)
+	geometry = new THREE.SphereGeometry(r, 16, 16)
 	material = new THREE.MeshBasicMaterial({color: 0x06a94d, wireframe: true});
 	mesh = new THREE.Mesh(geometry, material);
 
@@ -50,7 +50,7 @@ function createSphere(obj, r) {
 function createCone(obj, r) {
 	'use strict'
 
-	geometry = new THREE.ConeGeometry(r, 1.5, 64)
+	geometry = new THREE.ConeGeometry(r, 1.5, 32)
 	material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
 	mesh = new THREE.Mesh(geometry, material);
 
@@ -211,7 +211,6 @@ function createSkeletonUpper() {
 	skeleton.add(skeletonMiddle);
 	translateMesh(skeletonMiddle, 5, -10, 0);
 
-
 	scene.add(skeleton);
 
 	return skeleton;	
@@ -226,9 +225,11 @@ function createScene() {
 }
 
 function createCamera() {
-    'use strict'
-    camera = new THREE.OrthographicCamera(window.innerWidth / - 60, window.innerWidth / 60, window.innerHeight / 60, window.innerHeight / - 60, 1, 1000);
-    camera.position.set(0, -11.5, 10);
+	'use strict'
+	let aspectRatio = window.innerHeight/window.innerWidth;
+
+    camera = new THREE.OrthographicCamera(-32, 32, 32*aspectRatio, -32*aspectRatio, 1, 1000);
+    camera.position.set(0, -11.5, 30);
     camera.lookAt(new THREE.Vector3(0,-11.5,0));
 }
 
@@ -296,11 +297,11 @@ function onKeyDown(e) {
 	case 49: //1
 		camera.position.x = 0;
 		camera.position.y = -11.5;
-		camera.position.z = 10;
+		camera.position.z = 30;
 		camera.lookAt(new THREE.Vector3(0,-11.5,0));
 		break;
 	case 50: //2
-		camera.position.x = 10;
+		camera.position.x = 30;
 		camera.position.y = -11.5;
 		camera.position.z = 0;
 		camera.lookAt(new THREE.Vector3(0,-11.5,0));
@@ -311,6 +312,12 @@ function onKeyDown(e) {
 		camera.position.z = 0;
 		camera.lookAt(new THREE.Vector3(0,-11.5,0));
 		break;
+	case 52: //4
+		scene.traverse(function (node) {
+			if (node instanceof THREE.Mesh) {
+				node.material.wireframe = !node.material.wireframe;
+		}
+	});
     }
 }
 
