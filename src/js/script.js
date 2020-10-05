@@ -4,6 +4,8 @@ let geometry, material, mesh;
 
 let skeletonUpper, skeletonMiddle, skeletonLower;
 
+let fullSkeleton;
+
 let rotateUpper = 0, rotateMiddle = 0; rotateLower = 0; // 0 is stationary, -1 is counter clockwise 1 is clockwise
 
 let translate = [0, 0, 0, 0];
@@ -212,8 +214,7 @@ function createSkeletonUpper() {
 
 	skeleton.add(skeletonMiddle);
 	translateMesh(skeletonMiddle, 5, -10, 0);
-
-	scene.add(skeleton);
+	
 
 	return skeleton;	
 }
@@ -223,7 +224,12 @@ function createScene() {
     scene = new THREE.Scene();
 
     scene.add(new THREE.AxisHelper(150));
-    skeletonUpper = createSkeletonUpper();
+	fullSkeleton = new THREE.Object3D();
+
+	skeletonUpper = createSkeletonUpper();
+	fullSkeleton.add(skeletonUpper);
+
+	scene.add(fullSkeleton);
 }
 
 function createCamera() {
@@ -402,7 +408,7 @@ function animate() {
 
 	let translateVector = new THREE.Vector3(translate[2] - translate[0], 0, translate[3] - translate[1])
 
-	skeletonUpper.translateOnAxis(translateVector.normalize(), translateSpeed * delta);
+	fullSkeleton.translateOnAxis(translateVector.normalize(), translateSpeed * delta);
 
 	render();
 
