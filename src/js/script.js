@@ -6,6 +6,8 @@ let skeletonUpper, skeletonMiddle, skeletonLower;
 
 let rotateUpper = 0, rotateMiddle = 0; rotateLower = 0; // 0 is stationary, -1 is counter clockwise 1 is clockwise
 
+let translate = [0, 0, 0, 0];
+
 let clock = new THREE.Clock();
 
 function createCylinder(obj, h) {
@@ -255,6 +257,18 @@ function onKeyUp(e) {
 			case 99: //c
 				rotateLower = 0
 				break;
+			case 37:
+				translate[0] = 0;
+				break;
+			case 38:
+				translate[1] = 0;
+				break;
+			case 39:
+				translate[2] = 0;
+				break;
+			case 40:
+				translate[3] = 0;
+				break;	
 	}
 }
 
@@ -294,6 +308,18 @@ function onKeyDown(e) {
             }
         });
 		break;
+	case 37:
+		translate[0] = 1;
+		break;
+	case 38:
+		translate[1] = 1;
+		break;
+	case 39:
+		translate[2] = 1;
+		break;
+	case 40:
+		translate[3] = 1;
+		break;	
 	case 49: //1
 		camera.position.x = 0;
 		camera.position.y = -11.5;
@@ -346,32 +372,37 @@ function init() {
 
 function animate() {
     'use strict';
-	let speed = Math.PI;
+	let rotationSpeed = Math.PI;
 	let delta = 0;
+	let translateSpeed = 5;
 
 	delta = clock.getDelta();
 
 	if(rotateUpper == -1) {
 		console.log(delta);
-		rotateMesh(skeletonUpper, 0, speed * -delta, 0);
+		rotateMesh(skeletonUpper, 0, rotationSpeed * -delta, 0);
 	}
 	else if(rotateUpper == 1) {
-		rotateMesh(skeletonUpper, 0, speed * delta , 0);
+		rotateMesh(skeletonUpper, 0, rotationSpeed * delta , 0);
 	}
 
 	if(rotateMiddle == -1) {
-		rotateMesh(skeletonMiddle, 0, speed * -delta, 0);
+		rotateMesh(skeletonMiddle, 0, rotationSpeed * -delta, 0);
 	}
 	else if(rotateMiddle == 1) {
-		rotateMesh(skeletonMiddle, 0, speed * delta, 0);
+		rotateMesh(skeletonMiddle, 0, rotationSpeed * delta, 0);
 	}
 
 	if(rotateLower == -1) {
-		rotateMesh(skeletonLower, 0, speed * -delta, 0);
+		rotateMesh(skeletonLower, 0, rotationSpeed * -delta, 0);
 	}
 	else if(rotateLower == 1) {
-		rotateMesh(skeletonLower, 0, speed * delta, 0);
+		rotateMesh(skeletonLower, 0, rotationSpeed * delta, 0);
 	}
+
+	let translateVector = new THREE.Vector3(translate[2] - translate[0], 0, translate[3] - translate[1])
+
+	skeletonUpper.translateOnAxis(translateVector.normalize(), translateSpeed * delta);
 
 	render();
 
