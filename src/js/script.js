@@ -406,9 +406,11 @@ function animate() {
 		rotateMesh(skeletonLower, 0, rotationSpeed * delta, 0);
 	}
 
-	let translateVector = new THREE.Vector3(translate[2] - translate[0], 0, translate[3] - translate[1])
+	let translateVector = new THREE.Vector3(translate[2] - translate[0], 0, translate[3] - translate[1]);
+	translateVector.applyQuaternion(skeletonUpper.getWorldQuaternion().inverse());
+	translateVector.normalize();
 
-	fullSkeleton.translateOnAxis(translateVector.normalize(), translateSpeed * delta);
+	skeletonUpper.translateOnAxis(translateVector, translateSpeed * delta);
 
 	render();
 
