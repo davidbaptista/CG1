@@ -31,7 +31,7 @@ function createOctahedron(obj, r) {
 	geometry = new THREE.OctahedronGeometry(r);
 	material = new THREE.MeshBasicMaterial({color: 0x0000ff, wireframe: true});
 	mesh = new THREE.Mesh(geometry, material);
-
+	mesh.scale.set(1, 1, 0.2);
 	mesh.position.set(0, 0, 0);
 	obj.add(mesh);
 
@@ -44,7 +44,7 @@ function createSphere(obj, r) {
 	geometry = new THREE.SphereGeometry(r, 16, 16)
 	material = new THREE.MeshBasicMaterial({color: 0x06a94d, wireframe: true});
 	mesh = new THREE.Mesh(geometry, material);
-
+	mesh.scale.set(1, 1, 0.2);
 	mesh.position.set(0, 0, 0);
 	obj.add(mesh);
 
@@ -57,7 +57,7 @@ function createCone(obj, r) {
 	geometry = new THREE.ConeGeometry(r, 1.5, 32)
 	material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
 	mesh = new THREE.Mesh(geometry, material);
-
+	mesh.scale.set(1, 1, 0.2);
 	mesh.position.set(0, 0, 0);
 	obj.add(mesh);
 
@@ -70,7 +70,7 @@ function createBox(obj, h) {
 	geometry = new THREE.BoxGeometry(h, h, h)
 	material = new THREE.MeshBasicMaterial({color: 0xffa500, wireframe: true});
 	mesh = new THREE.Mesh(geometry, material);
-
+	mesh.scale.set(1, 1, 0.2);
 	mesh.position.set(0, 0, 0);
 	obj.add(mesh);
 
