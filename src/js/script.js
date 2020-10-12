@@ -4,7 +4,7 @@ let geometry, material, mesh;
 
 let skeletonUpper, skeletonMiddle, skeletonLower;
 
-let rotateUpper = 0, rotateMiddle = 0; rotateLower = 0; // 0 is stationary, -1 is counter clockwise 1 is clockwise
+let rotate = [0, 0, 0, 0, 0, 0]
 
 let translate = [0, 0, 0, 0];
 
@@ -245,19 +245,22 @@ function onKeyUp(e) {
 			case 113: //q
 			case 87: //W
 			case 119: //w
-				rotateUpper = 0;
+				rotate[0] = 0;
+				rotate[1] = 0;
 				break;
 			case 65: //A
 			case 97: //a
 			case 68: //D
 			case 100: //d
-				rotateMiddle = 0;
+				rotate[2] = 0;
+				rotate[3] = 0;
 				break;
 			case 90: //Z
 			case 122: //z
 			case 67: //C
 			case 99: //c
-				rotateLower = 0
+				rotate[4] = 0;
+				rotate[5] = 0;
 				break;
 			case 37:
 				translate[0] = 0;
@@ -280,27 +283,27 @@ function onKeyDown(e) {
     switch (e.keyCode) {
 	case 81: //Q
 	case 113: //q
-		rotateUpper = -1;
+		rotate[0] = 1;
 		break;
 	case 87: //W
 	case 119: //w
-		rotateUpper = 1
+		rotate[1] = 1
 		break;
     case 65: //A
-    case 97: //a
-		rotateMiddle = -1;
+	case 97: //a
+		rotate[2] = 1
 		break;
 	case 68: //D
 	case 100: //d
-		rotateMiddle = 1;
+		rotate[3] = 1
 		break;
 	case 90: //Z
 	case 122: //z
-		rotateLower = -1;
+		rotate[4] = 1
 		break;
 	case 67: //C
 	case 99: //c
-		rotateLower = 1;
+		rotate[5] = 1
 		break;
     case 69:  //E
     case 101: //e
@@ -380,27 +383,9 @@ function animate() {
 
 	delta = clock.getDelta();
 
-	if(rotateUpper == -1) {
-		console.log(delta);
-		rotateMesh(skeletonUpper, 0, rotationSpeed * -delta, 0);
-	}
-	else if(rotateUpper == 1) {
-		rotateMesh(skeletonUpper, 0, rotationSpeed * delta , 0);
-	}
-
-	if(rotateMiddle == -1) {
-		rotateMesh(skeletonMiddle, 0, rotationSpeed * -delta, 0);
-	}
-	else if(rotateMiddle == 1) {
-		rotateMesh(skeletonMiddle, 0, rotationSpeed * delta, 0);
-	}
-
-	if(rotateLower == -1) {
-		rotateMesh(skeletonLower, 0, rotationSpeed * -delta, 0);
-	}
-	else if(rotateLower == 1) {
-		rotateMesh(skeletonLower, 0, rotationSpeed * delta, 0);
-	}
+	rotateMesh(skeletonUpper, 0, rotationSpeed * delta * (rotate[0] - rotate[1]),0);
+	rotateMesh(skeletonMiddle, 0, rotationSpeed * delta * (rotate[2] - rotate[3]),0);
+	rotateMesh(skeletonLower, 0, rotationSpeed * delta * (rotate[4] - rotate[5]),0);
 
 	let translateVector = new THREE.Vector3(translate[2] - translate[0], 0, translate[3] - translate[1]);
 	translateVector.normalize();
