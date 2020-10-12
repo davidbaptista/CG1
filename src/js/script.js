@@ -4,11 +4,13 @@ let geometry, material, mesh;
 
 let skeletonUpper, skeletonMiddle, skeletonLower;
 
-let rotate = [0, 0, 0, 0, 0, 0]
+let rotate = [0, 0, 0, 0, 0, 0]; // Q, W, A, D, Z, C 
 
-let translate = [0, 0, 0, 0];
+let translate = [0, 0, 0, 0]; // 
 
 let clock = new THREE.Clock();
+
+let wireframeOn = true;
 
 function createCylinder(obj, h) {
     'use strict'
@@ -231,8 +233,9 @@ function createScene() {
 function createCamera() {
 	'use strict'
 	let aspectRatio = window.innerHeight/window.innerWidth;
+	let cameraSize = 32;
 
-    camera = new THREE.OrthographicCamera(-32, 32, 32*aspectRatio, -32*aspectRatio, 1, 1000);
+    camera = new THREE.OrthographicCamera(-cameraSize, cameraSize, cameraSize*aspectRatio, -cameraSize*aspectRatio, 1, 1000);
     camera.position.set(0, -11.5, 30);
     camera.lookAt(new THREE.Vector3(0,-11.5,0));
 }
@@ -243,35 +246,38 @@ function onKeyUp(e) {
 	switch(e.keyCode) {
 			case 81: //Q
 			case 113: //q
+				rotate[0] = 0;
+				break;
 			case 87: //W
 			case 119: //w
-				rotate[0] = 0;
 				rotate[1] = 0;
 				break;
 			case 65: //A
 			case 97: //a
+				rotate[2] = 0;
+				break;
 			case 68: //D
 			case 100: //d
-				rotate[2] = 0;
 				rotate[3] = 0;
 				break;
 			case 90: //Z
 			case 122: //z
+				rotate[4] = 0;
+				break;
 			case 67: //C
 			case 99: //c
-				rotate[4] = 0;
 				rotate[5] = 0;
 				break;
-			case 37:
+			case 37: // Left
 				translate[0] = 0;
 				break;
-			case 38:
+			case 38: // Up
 				translate[1] = 0;
 				break;
-			case 39:
+			case 39: // Right 
 				translate[2] = 0;
 				break;
-			case 40:
+			case 40: //Down
 				translate[3] = 0;
 				break;	
 	}
@@ -305,24 +311,16 @@ function onKeyDown(e) {
 	case 99: //c
 		rotate[5] = 1
 		break;
-    case 69:  //E
-    case 101: //e
-        scene.traverse(function (node) {
-            if (node instanceof THREE.AxisHelper) {
-                node.visible = !node.visible;
-            }
-        });
-		break;
-	case 37:
+	case 37: // Left 
 		translate[0] = 1;
 		break;
-	case 38:
+	case 38: // Up
 		translate[1] = 1;
 		break;
-	case 39:
+	case 39: // Right
 		translate[2] = 1;
 		break;
-	case 40:
+	case 40: //Down
 		translate[3] = 1;
 		break;	
 	case 49: //1
@@ -344,7 +342,7 @@ function onKeyDown(e) {
 		camera.lookAt(new THREE.Vector3(0,-11.5,0));
 		break;
 	case 52: //4
-		scene.traverse(function (node) {
+		skeletonUpper.traverse(function (node) {
 			if (node instanceof THREE.Mesh) {
 				node.material.wireframe = !node.material.wireframe;
 		}
@@ -388,8 +386,8 @@ function animate() {
 	rotateMesh(skeletonLower, 0, rotationSpeed * delta * (rotate[4] - rotate[5]),0);
 
 	let translateVector = new THREE.Vector3(translate[2] - translate[0], 0, translate[3] - translate[1]);
-	translateVector.normalize();
-	translateVector.multiplyScalar(translateSpeed * delta);
+	translateVector.normalize();	// Norma do vetro igual a 1
+	translateVector.multiplyScalar(translateSpeed * delta);		// Norma do vetor igual a translacao
 
 	skeletonUpper.position.x += translateVector.x;
 	skeletonUpper.position.y += translateVector.y;
